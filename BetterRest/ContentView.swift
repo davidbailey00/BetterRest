@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var wakeUp = Date()
+    @State private var wakeUp = getDefaultWakeTime()
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
 
@@ -18,36 +18,34 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                Text("When do you want to wake up?")
-                    .font(.headline)
-
-                DatePicker(
-                    "Please enter a time",
-                    selection: $wakeUp,
-                    displayedComponents: .hourAndMinute
-                )
-                .labelsHidden()
-
-                Text("Desired amount of sleep")
-                    .font(.headline)
-
-                Stepper(
-                    value: $sleepAmount,
-                    in: 4 ... 12,
-                    step: 0.25
-                ) {
-                    Text("\(sleepAmount, specifier: "%g") hours")
+            Form {
+                Section(header: Text("Wake up time")) {
+                    DatePicker(
+                        "Wake up time",
+                        selection: $wakeUp,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .labelsHidden()
+                    .datePickerStyle(WheelDatePickerStyle())
                 }
 
-                Text("Daily coffee intake")
-                    .font(.headline)
+                Section(header: Text("Desired amount of sleep")) {
+                    Stepper(
+                        value: $sleepAmount,
+                        in: 4 ... 12,
+                        step: 0.25
+                    ) {
+                        Text("\(sleepAmount, specifier: "%g") hours")
+                    }
+                }
 
-                Stepper(value: $coffeeAmount, in: 1 ... 20) {
-                    if coffeeAmount == 1 {
-                        Text("1 cup")
-                    } else {
-                        Text("\(coffeeAmount) cups")
+                Section(header: Text("Daily coffee intake")) {
+                    Stepper(value: $coffeeAmount, in: 1 ... 20) {
+                        if coffeeAmount == 1 {
+                            Text("1 cup")
+                        } else {
+                            Text("\(coffeeAmount) cups")
+                        }
                     }
                 }
             }
@@ -96,6 +94,13 @@ struct ContentView: View {
         }
 
         showingAlert = true
+    }
+
+    static func getDefaultWakeTime() -> Date {
+        var components = DateComponents()
+        components.hour = 8
+        components.minute = 0
+        return Calendar.current.date(from: components)!
     }
 }
 
