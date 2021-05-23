@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Wake up time")) {
+                Section(header: Text("When do you wake up?")) {
                     DatePicker(
                         "Wake up time",
                         selection: $wakeUp,
@@ -28,6 +28,7 @@ struct ContentView: View {
                     .labelsHidden()
                     .datePickerStyle(WheelDatePickerStyle())
                 }
+                .textCase(nil)
 
                 Section(header: Text("Desired amount of sleep")) {
                     Stepper(
@@ -38,6 +39,7 @@ struct ContentView: View {
                         Text("\(sleepAmount, specifier: "%g") hours")
                     }
                 }
+                .textCase(nil)
 
                 Section(header: Text("Daily coffee intake")) {
                     Stepper(value: $coffeeAmount, in: 1 ... 20) {
@@ -48,6 +50,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                .textCase(nil)
             }
             .navigationBarTitle("BetterRest")
             .navigationBarItems(
